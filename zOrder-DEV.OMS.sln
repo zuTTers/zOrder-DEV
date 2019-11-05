@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2000
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zOrder.OMS", "zOrder.OMS\zOrder.OMS.csproj", "{232D5E23-BA85-4EFC-AD8B-A5AC555B8360}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zOrder-DEV.OMS", "zOrder.OMS\zOrder-DEV.OMS.csproj", "{232D5E23-BA85-4EFC-AD8B-A5AC555B8360}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

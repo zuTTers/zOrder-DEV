@@ -35,8 +35,8 @@
             </div>
         </div>
         <div class="row">
-            <uib-tabset active="0" justified="true">
-                <uib-tab index="0" heading="Dokunmatik İşlem" ng-click="vm.fastOrder = false;">
+            <uib-tabset active="vm.activeTabSet" justified="true">
+                <!--<uib-tab index="0" heading="Dokunmatik İşlem" ng-click="vm.fastOrder = false;" ng-show="1 == 0">
                     <div class="col-xs-12" style="margin-top:1%;">
                         <div class="col-xs-6" ng-click="">
                             <div class="d-flex align-content-stretch flex-wrap">
@@ -160,12 +160,12 @@
                             </div>
                         </div>
                     </div>
-                </uib-tab>
-                <uib-tab index="1" heading="Barkodlu İşlem" ng-click="vm.fastOrder = false;">
+                </uib-tab>-->
+                <!--<uib-tab index="1" heading="Barkodlu İşlem" ng-click="vm.fastOrder = false;" ng-if="1 == 0">
                     <div class="col-lg-12">
                         <input ng-model="vm.row.Barcode" ng-change="vm.getBarcode()" type="number" class="form-control text-uppercase" style="text-transform:uppercase; margin-left: 30px; margin-top: 1%; font-size:20px; text-align:center; width:88%; float:left;" maxlength="10" ng-keypress="vm.IsNumber(event)" placeholder="Barkod No" />
                     </div>
-                </uib-tab>
+                </uib-tab>-->
                 <uib-tab index="2" heading="Hızlı İşlem" ng-click="vm.fastOrder = true;">
                     <div class="col-lg-12">
                         <input ng-model="vm.row.Price" type="number" class="form-control text-uppercase" style="text-transform:uppercase; margin-left: 30px; margin-top: 1%; font-size:20px; text-align:center; width:88%; float:left;" maxlength="5" ng-keypress="vm.IsNumber(event)" placeholder="TL" />
@@ -228,7 +228,7 @@
     </form>
 </div>
 <div class="modal-footer">
-    <uib-progressbar class="progress-striped active" value="65" type="warning" style="margin-bottom:0px !important;"><small><em>Sipariş Hazırlanıyor</em></small></uib-progressbar>
+    <uib-progressbar class="progress-striped active" value="100" type="warning" style="margin-bottom:0px !important;"><small><em>Sipariş Hazırlanıyor</em></small></uib-progressbar>
     <div class="col-lg-1">
         <b class="text-muted">Teslim: </b>
         <label class="custom-control custom-checkbox">

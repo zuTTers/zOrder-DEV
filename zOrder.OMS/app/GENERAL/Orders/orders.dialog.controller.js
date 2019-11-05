@@ -15,11 +15,16 @@
 
         vm.row = data.order;
         vm.edit = data.edit;
+
+        vm.fastOrder = true;
+
+        vm.activeTabSet = 2;
         
         if (!vm.edit) { vm.Title = 'Yeni Fiş'; vm.minDate = new Date().toDateString();}
 
         if (vm.edit) {
             vm.Title = 'Fiş Detay';
+            vm.activeTabSet = 3;
             vm.orderdetailDataList = data.orderDetail;
             vm.row.OrderDate = $filter("jsDate")($filter("formatDate")(vm.row.OrderDate));
             //vm.row.OrderDate = new Date(vm.row.OrderDate).toDateString();
@@ -56,40 +61,46 @@
         };
 
         vm.filter = {};
-        //vm.data = [];
 
         vm.ok = function () {
-            if (!vm.row.IsDelivered) { vm.row.IsDelivered = false; }
-            if (!vm.row.IsPaid) { vm.row.Paid = false; }
-            if (vm.fastOrder) {
-                vm.orderdetailDataList = [{
-                    Operation_Id: "1141",
-                    Operation_Text: "Diğer",
-                    Price: vm.row.Price,
-                    Quantity: 1,
-                    TotalPrice: vm.row.Price
-                }];
+                if (!vm.row.IsDelivered) { vm.row.IsDelivered = false; }
+                if (!vm.row.IsPaid) { vm.row.Paid = false; }
+                if (vm.fastOrder && !vm.edit) {
+                    vm.orderdetailDataList = [{
+                        Operation_Id: "9999",
+                        Operation_Text: "Diğer",
+                        Price: vm.row.Price,
+                        Quantity: 1,
+                        TotalPrice: vm.row.Price
+                    }];
+                }
+                vm.row.OrderDate = new Date(vm.row.OrderDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
+
+                var input = {
+                    order: vm.row,
+                    orderDetail: vm.orderdetailDataList
+                }
+                
+            if (vm.row.PhoneNumber && vm.row.OrderDate && vm.row.CustomerName) {
+                $http.post('/api/Orders/Save', input)
+                    .then(function (response) {
+                        if (response.data.success) {
+                            $filter("showInfo")($filter, response.data.message, 1000, 'info'); // JSON text denenebilir
+                            $state.reload();
+                            $uibModalInstance.close('ok');
+                        }
+                        else {
+                            $filter("showInfo")($filter, response.data.message, 1000, 'info'); // JSON text denenebilir
+                        }
+                    });
             }
-            vm.row.OrderDate = new Date(vm.row.OrderDate.replace(/(\d{2})-(\d{2})-(\d{4})/, "$2/$1/$3"));
-
-            var input = {
-                order: vm.row,
-                orderDetail: vm.orderdetailDataList
+            else {
+                $filter("showInfo")($filter, "Bilgiler eksik!", 1000, 'info'); // JSON text denenebilir
             }
-
-            $http.post('/api/Orders/Save', input)
-                .then(function (response) {
-                    if (response.data.success) {
-                        $filter("showInfo")($filter, response.data.message, 1000, 'info'); // JSON text denenebilir
-                        $uibModalInstance.close('ok');
-                    }
-                    else {
-                        $filter("showInfo")($filter, response.data.message, 1000, 'info'); // JSON text denenebilir
-                    }
-                });
-            $state.reload();
-
         };
+
+ 
+
 
         vm.cancel = function () {
             $uibModalInstance.dismiss('cancel');

@@ -123,8 +123,12 @@
                 </div>
             </div>
         </div>
-
     </div>
+    <script type="text/javascript">
+        setTimeout(function () { window.print(); }, 500);
+        window.onfocus = function () { setTimeout(function () { window.close(); }, 500); }
+    </script>
+
     <!--------------------------------------all external js documents----------------------------------------------->
     <script src="../scripts/modernizr-2.8.3.js"></script>
     <script src="../scripts/respond.min.js"></script>

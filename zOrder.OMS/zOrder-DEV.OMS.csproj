@@ -602,6 +602,7 @@
     <Content Include="Models\zOrderModel.edmx.diagram">
       <DependentUpon>zOrderModel.edmx</DependentUpon>
     </Content>
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\Chart.bundle.js" />
     <Content Include="Scripts\Chart.bundle.min.js" />
