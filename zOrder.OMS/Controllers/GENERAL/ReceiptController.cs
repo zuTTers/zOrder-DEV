@@ -42,7 +42,7 @@ namespace zOrder.OMS.Controllers.GENERAL
                     orderreceipt.NTotalPrice = Convert.ToInt32(orderdata.OrderDetail.Sum(x => x.TotalPrice).Value) - ((Convert.ToInt32(orderdata.OrderDetail.Sum(x => x.TotalPrice).Value) * Convert.ToInt32(orderdata.Discount) / 100));
                     orderreceipt.TQuantity = orderdata.OrderDetail.Sum(x => x.Quantity).Value;
                     orderreceipt.DetailList = new List<OrderDetails>();
-                    orderreceipt.IsPaid = orderdata.IsPaid.Value;
+                    orderreceipt.IsPaid = orderdata.IsPaid.HasValue ? orderdata.IsPaid.Value : false;
 
                     foreach (var item in orderdata.OrderDetail.ToList())
                     {

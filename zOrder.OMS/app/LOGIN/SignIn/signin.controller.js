@@ -28,7 +28,7 @@
                 .then(function (response) {
                     vm.data = response.data.retObject;
                     location.href = response.data.retObject;
-                    $filter("showInfo")($filter, 'Twitter Giriş Sağlandı', 1000, 'info');
+                    //$filter("showInfo")($filter, 'Twitter Giriş Sağlandı', 1000, 'info');
                 });
         }
 

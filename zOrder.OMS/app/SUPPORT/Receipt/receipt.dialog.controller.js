@@ -11,21 +11,30 @@
         vm.data = [];
         //var myid = $stateParams.Order_Id;
 
+        vm.printReceipt_1 = function () {
+            setTimeout(function () { window.print(); }, 500);
+        }
+
+        vm.printReceipt_2 = function () {
+            setTimeout(function () { window.print(); }, 8500);
+            window.onfocus = function () {
+                setTimeout(function () { window.close(); }, 9000);
+            }
+        }
+
         vm.receipt = function () {
             $http.get('/api/Receipt/Detail?id=' + $stateParams.Order_Id)
                 .then(function (response) {
                     vm.data = response.data.retObject;
                     vm.row = response.data.retObject;
-                    $filter("showInfo")($filter, response.data.message, 1000, 'info'); // JSON text denenebilir
+                    vm.printReceipt_1();
+                    vm.printReceipt_2();
                 });
         };
 
         vm.receipt();
 
-        vm.printReceipt = function () {
-            setTimeout(function () { window.print(); }, 1000);
-            window.onfocus = function () { setTimeout(function () { window.close(); }, 1000); }
-        }
+
 
 
 
