@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
+using RestSharp.Extensions;
+using System.Web;
+using System.Net.Http.Headers;
+using System.Web.Routing;
 
 namespace zOrder.OMS.Helper
 {
@@ -37,5 +42,23 @@ namespace zOrder.OMS.Helper
             }
             return true;
         }
+
+        //public HttpResponseMessage RedirectApiUrl(string controller, string action)
+        //{
+        //    var newUrl = this.Url.Link("DefaultApi", new
+        //    {
+        //        Controller = controller,
+        //        Action = action
+        //    });
+        //    return Request.CreateResponse(HttpStatusCode.OK,
+        //                                              new { Success = true, RedirectUrl = newUrl });
+        //}
+
+        //public HttpResponseMessage GetGoogle()
+        //{
+        //    var response = Request.CreateResponse(HttpStatusCode.Found);
+        //    response.Headers.Location = new Uri("http://www.google.com");
+        //    return response;
+        //}
     }
 }

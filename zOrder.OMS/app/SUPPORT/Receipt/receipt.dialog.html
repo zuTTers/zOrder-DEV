@@ -1,4 +1,5 @@
 ﻿<style>
+    body { margin:0px;padding:0px;}
     .header, .side-nav {
             display: none !important;
         }
@@ -7,7 +8,7 @@
     <div class="row">
         <div class="col-lg-12">
             <div class="text-center">
-                <img src="../images/logooldu.png" alt="fis" width="120" height="60">
+                <img src="../images/logooldu.png" alt="fis" width="90" height="45">
             </div>
         </div>
     </div>
@@ -53,7 +54,7 @@
             <br />
             <samp>Verilen:</samp>{{vm.row.Debt}}
             <br />
-            <samp>Durum:</samp><b>{{vm.row.IsPaid}}</b>
+            <samp>Durum:</samp><b>{{vm.row.IsPaid == true ? 'Ödendi':'Ödenmedi'}}</b>
         </div>
     </div>
     <br />
@@ -73,8 +74,8 @@
                     <td>{{item.ProductName}}</td>
                     <td>{{item.OperationText}}</td>
                     <td>{{item.Quantity}}</td>
-                    <td>{{item.Price}} ₺</td>
-                    <td style="padding-right:5px;">{{item.TotalPrice}} ₺</td>
+                    <td>{{item.Price}} TL </td>
+                    <td style="padding-right:5px;">{{item.TotalPrice}} TL</td>
                 </tr>
             </tbody>
         </table>
@@ -82,8 +83,8 @@
             <tr>
                 <td></td>
                 <td>Toplam Parça:<strong>{{vm.row.TQuantity}}</strong></td>
-                <td>Toplam Tutar:<strong>{{vm.row.TTotalPrice}} ₺</strong></td>
-                <td>İndirimli Tutar:<strong>{{vm.row.NTotalPrice}} ₺</strong></td>
+                <td>Toplam Tutar:<strong>{{vm.row.TTotalPrice}} TL</strong></td>
+                <td>İndirimli Tutar:<strong>{{vm.row.NTotalPrice}} TL</strong></td>
                 <td></td>
             </tr>
         </table>
@@ -92,13 +93,7 @@
     <br />
     <div class="row" style="float:left;">
         <div class="col-lg-12" style="font-size:10px !important;">
-            <em style="font-size:15px !important;"><i>SAMPLE Terzi'yi Tercih Ettiğiniz İçin Teşekkür Ederiz.</i></em>
-            <em style="font-size:15px !important;" class="text-uppercase">Ürün verenler aşağıdaki şartları kabul etmiştir.</em>
-            <em style="font-size:15px !important;">30 gün içerisinde alınmayan ürünlerden ve üretimden kaynaklı ürün bozulmalarından firmamız sorumlu değildir.</em>
+            <em style="font-size:15px !important;">15 gün içerisinde alınmayan ürünlerden mesul değiliz.</em>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    //setTimeout(function () { window.print(); }, 1000);
-    //window.onfocus = function () { setTimeout(function () { window.close(); }, 1000); }
-</script>

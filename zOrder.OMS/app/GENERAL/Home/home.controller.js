@@ -26,7 +26,14 @@
             vm.reverse = !vm.reverse;
         };
 
-        
+        vm.sendTweet = function () {
+            $http.post('/api/Login/UpdateStatus?status=', vm.tweet)
+                .then(function (response) {
+                    vm.data = response.data.retObject;
+                    $filter("showInfo")($filter, 'Twitter Atıldı!', 1000, 'info');
+                });
+            
+        }
     }
 })();
 

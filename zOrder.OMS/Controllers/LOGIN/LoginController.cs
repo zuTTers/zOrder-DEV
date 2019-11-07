@@ -11,18 +11,23 @@ using RestSharp;
 using RestSharp.Authenticators;
 using RestSharp.Extensions;
 using System.Web;
+using System.Net.Http.Headers;
+using System.Web.Routing;
 
 namespace zOrder.OMS.Controllers
 {
     public class LoginController : ApiController
     {
-        public string twitter_consumer_key = System.Configuration.ConfigurationManager.AppSettings["TwitterKey"];
-        public string twitter_consumer_secret = System.Configuration.ConfigurationManager.AppSettings["TwitterSecretKey"];
+        public string twitter_consumer_key = System.Configuration.ConfigurationManager.AppSettings["TwitterConsumerKey"];
+        public string twitter_consumer_secret = System.Configuration.ConfigurationManager.AppSettings["TwitterConsumerSecretKey"];
+        public string twitter_token_key = System.Configuration.ConfigurationManager.AppSettings["TwitterTokenKey"];
+        public string twitter_token_secret = System.Configuration.ConfigurationManager.AppSettings["TwitterTokenSecretKey"];
 
+        // Normal sistem kullanıcısı girişi
         // GET: api/Login
         [HttpGet, HttpPost]
         [ActionName("userAuthentication")]
-        public JsonResult<ReturnValue> userAuthentication(string username,string password)
+        public JsonResult<ReturnValue> userAuthentication(string username, string password)
         {
             ReturnValue ret = new ReturnValue();
             var token = Guid.NewGuid();
@@ -33,7 +38,7 @@ namespace zOrder.OMS.Controllers
                 {
                     var user = db.Users.Where(x => x.Mail == username && x.Password == password && x.IsDeleted == false)
                         .Select(x => new { Mail = x.Mail, Password = x.Password, IsDeleted = x.IsDeleted }).First();
-                                    
+
                     if (user != null)
                     {
                         ret.retObject = new { token = token };
@@ -53,6 +58,74 @@ namespace zOrder.OMS.Controllers
                     ret.error = ex.ToString();
                 }
             }
+            return Json(ret);
+        }
+
+        [HttpGet, HttpPost]
+        [ActionName("TwitterAuth")]
+        public JsonResult<ReturnValue> TwitterAuth()
+        {
+            ReturnValue ret = new ReturnValue();
+
+            try
+            {
+                // localhost | https://127.0.0.1/api/Login/TwitterAccess  
+                // app | https://zutters.github.io/api/Login/TwitterAccess 
+                // ngrok | http://b08b7735.ngrok.io/api/Login/TwitterAccess
+
+                var url = GetRequestToken(twitter_consumer_key, twitter_consumer_secret, "http://47cd4380.ngrok.io/api/Login/TwitterAccess");
+
+                ret.retObject = url;
+                ret.success = true;
+                ret.message = "TwitterAuth";
+            }
+            catch (Exception ex)
+            {
+                ret.success = false;
+                ret.error = ex.Message;
+            }
+
+            return Json(ret);
+        }
+
+        [HttpGet, HttpPost]
+        [ActionName("TwitterAccess")]
+        public HttpResponseMessage TwitterAccess(string oauth_token, string oauth_verifier)
+        {
+            string baseurl = GetBaseUrl();
+
+            //save user data who accessed twitter login
+            var data = GetAccessToken(twitter_consumer_key, twitter_consumer_secret, oauth_token, "", oauth_verifier);
+
+            //string reqUrl = "http://localhost:64658/app/";
+            string reqUrl = baseurl + "app/";
+
+            var response = Request.CreateResponse(HttpStatusCode.Found);
+            response.Headers.Location = new Uri(reqUrl);
+
+            //twitter girişi onaylandı ve anasayfaya redirect edildi
+            return response;
+        }
+
+        //Todo : Get user tweets
+        public JsonResult<ReturnValue> GetTweetList()
+        {
+            ReturnValue ret = new ReturnValue();
+
+            try
+            {
+                var client = new HttpClient();
+
+                ret.retObject = "";
+                ret.success = true;
+                ret.message = "Twitter";
+            }
+            catch (Exception ex)
+            {
+                ret.success = false;
+                ret.error = ex.Message;
+            }
+
             return Json(ret);
         }
 
@@ -97,6 +170,7 @@ namespace zOrder.OMS.Controllers
                 string xAuthExpires = qs["x_auth_expires"];
 
                 return screenName;
+
             }
             else
             {
@@ -105,78 +179,31 @@ namespace zOrder.OMS.Controllers
 
         }
 
-
-        [HttpGet, HttpPost]
-        [ActionName("TwitterAuth")]
-        public JsonResult<ReturnValue> TwitterAuth()
+        public void UpdateStatus(string status, string key, string secret, string token, string tokensecret)
         {
-            ReturnValue ret = new ReturnValue();
+            var client = new RestClient("https://api.twitter.com");
+            var request = new RestRequest("/1.1/statuses/update.json", Method.POST);
+            request.AddQueryParameter("status", status);
 
-            try
-            {
-                // localhost | https://127.0.0.1/Login/TwitterAccess  
-                // app | https://zutters.github.io/Login/TwitterAccess 
-                // ngrok | http://b08b7735.ngrok.io/Login/TwitterAccess
+            client.Authenticator = OAuth1Authenticator.ForProtectedResource(key, secret, token, tokensecret);
 
-                var url = GetRequestToken(twitter_consumer_key, twitter_consumer_secret, "http://845d0264.ngrok.io/api/Login/TwitterAccess"); 
+            var response = client.Execute(request);
 
-                ret.retObject = url;
-                ret.success = true;
-                ret.message = "TwitterAuth";
-            }
-            catch (Exception ex)
-            {
-                ret.success = false;
-                ret.error = ex.Message;
-            }
-
-            return Json(ret);
         }
 
-        [HttpGet, HttpPost]
-        [ActionName("TwitterAccess")]
-        public JsonResult<ReturnValue> TwitterAccess(string oauth_token,string oauth_verifier)
+        public string GetBaseUrl()
         {
-            ReturnValue ret = new ReturnValue();
+            var request = HttpContext.Current.Request;
+            var appUrl = HttpRuntime.AppDomainAppVirtualPath;
 
-            try
-            {
-                var data = GetAccessToken(twitter_consumer_key, twitter_consumer_secret, oauth_token, "", oauth_verifier); 
+            if (appUrl != "/")
+                appUrl = "/" + appUrl;
 
-                ret.retObject = data;
-                ret.success = true;
-                ret.message = "TwitterAccess";
-            }
-            catch (Exception ex)
-            {
-                ret.success = false;
-                ret.error = ex.Message;
-            }
+            var baseUrl = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, appUrl);
 
-            return Json(ret);
+            return baseUrl;
         }
 
-        //Todo : Get user tweets
-        public JsonResult<ReturnValue> GetTweetList()
-        {
-            ReturnValue ret = new ReturnValue();
-
-            try
-            {
-                var client = new HttpClient();
-
-                ret.retObject = "";
-                ret.success = true;
-                ret.message = "Twitter";
-            }
-            catch (Exception ex)
-            {
-                ret.success = false;
-                ret.error = ex.Message;
-            }
-
-            return Json(ret);
-        }
 
 
     }

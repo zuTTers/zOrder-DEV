@@ -19,7 +19,8 @@
             </button>
         </div>
         <div class="chart">
-
+            <input ng-model="vm.tweet" type="text" class="form-control" placeholder="Ne düşünüyorsun?" />
+            <button ng-click="vm.sendTweet()" class="btn btn-default pull-right">Tweet</button>
         </div>
     </div>
     <div class="widget">
