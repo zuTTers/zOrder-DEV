@@ -27,12 +27,15 @@
         };
 
         vm.sendTweet = function () {
-            $http.post('/api/Login/UpdateStatus?status=', vm.tweet)
+            var input = { 'data' : vm.tweet }
+
+            $http.post('/api/Home/UpdateStatus', input)
                 .then(function (response) {
                     vm.data = response.data.retObject;
-                    $filter("showInfo")($filter, 'Twitter Atıldı!', 1000, 'info');
+                    $filter("showInfo")($filter, 'Tweet Atıldı!', 1000, 'info');
                 });
-            
+
+
         }
     }
 })();

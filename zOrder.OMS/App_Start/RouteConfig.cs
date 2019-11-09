@@ -20,11 +20,11 @@ namespace zOrder.OMS
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
-            routes.MapHttpRoute(
-                name: "DefaultApi",
-                routeTemplate: "api/{controller}/{action}/{id}/{id2}",
-                defaults: new { id = RouteParameter.Optional, id2 = RouteParameter.Optional }
-            );
+            //routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{action}/{id}/{id2}",
+            //    defaults: new { id = RouteParameter.Optional, id2 = RouteParameter.Optional }
+            //);
         }
     }
 }

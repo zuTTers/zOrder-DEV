@@ -73,7 +73,7 @@ namespace zOrder.OMS.Controllers
                 // app | https://zutters.github.io/api/Login/TwitterAccess 
                 // ngrok | http://b08b7735.ngrok.io/api/Login/TwitterAccess
 
-                var url = GetRequestToken(twitter_consumer_key, twitter_consumer_secret, "http://47cd4380.ngrok.io/api/Login/TwitterAccess");
+                var url = GetRequestToken(twitter_consumer_key, twitter_consumer_secret, "http://38a87624.ngrok.io/api/Login/TwitterAccess");
 
                 ret.retObject = url;
                 ret.success = true;
@@ -107,28 +107,6 @@ namespace zOrder.OMS.Controllers
             return response;
         }
 
-        //Todo : Get user tweets
-        public JsonResult<ReturnValue> GetTweetList()
-        {
-            ReturnValue ret = new ReturnValue();
-
-            try
-            {
-                var client = new HttpClient();
-
-                ret.retObject = "";
-                ret.success = true;
-                ret.message = "Twitter";
-            }
-            catch (Exception ex)
-            {
-                ret.success = false;
-                ret.error = ex.Message;
-            }
-
-            return Json(ret);
-        }
-
         public string GetRequestToken(string key, string secret, string callBackUrl)
         {
             var client = new RestClient("https://api.twitter.com");
@@ -136,15 +114,21 @@ namespace zOrder.OMS.Controllers
 
             var request = new RestRequest("/oauth/request_token", Method.POST);
             var response = client.Execute(request);
+            string url = "";
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var qs = HttpUtility.ParseQueryString(response.Content);
 
-            var qs = HttpUtility.ParseQueryString(response.Content);
+                string oauthToken = qs["oauth_token"];
+                string oauthTokenSecret = qs["oauth_token_secret"];
+                request = new RestRequest("oauth/authorize?oauth_token=" + oauthToken);
+                client.BuildUri(request).ToString();
+            }
+            else
+            {
+                url = GetBaseUrl() + "app/";
+            }
 
-            string oauthToken = qs["oauth_token"];
-            string oauthTokenSecret = qs["oauth_token_secret"];
-
-            request = new RestRequest("oauth/authorize?oauth_token=" + oauthToken);
-
-            string url = client.BuildUri(request).ToString();
             return url;
         }
 
@@ -152,12 +136,10 @@ namespace zOrder.OMS.Controllers
         {
             var client = new RestClient("https://api.twitter.com");
             var request = new RestRequest("/oauth/access_token", Method.POST);
-
             client.Authenticator = OAuth1Authenticator.ForAccessToken(key, secret, otoken, otokensecret, overifier);
-
             var response = client.Execute(request);
 
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            if (response.StatusCode == HttpStatusCode.OK)
             {
                 var qs = HttpUtility.ParseQueryString(response.Content);
                 //we have token
@@ -174,20 +156,8 @@ namespace zOrder.OMS.Controllers
             }
             else
             {
-                return "Error";
+                return "Hata";
             }
-
-        }
-
-        public void UpdateStatus(string status, string key, string secret, string token, string tokensecret)
-        {
-            var client = new RestClient("https://api.twitter.com");
-            var request = new RestRequest("/1.1/statuses/update.json", Method.POST);
-            request.AddQueryParameter("status", status);
-
-            client.Authenticator = OAuth1Authenticator.ForProtectedResource(key, secret, token, tokensecret);
-
-            var response = client.Execute(request);
 
         }
 
