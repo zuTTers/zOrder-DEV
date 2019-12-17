@@ -41,18 +41,18 @@
                     <table>
                         <tr>
                             <td>Fiş No</td>
-                            <td>&nbsp; :<samp> {{Order_Id}}</samp></td>
+                            <td>&nbsp; :<samp> {{vm.row.Order_Id}}</samp></td>
                         </tr>
                         <tr>
                             <td>Tarih</td>
                             <td>
-                                &nbsp; :<samp> {{CreatedDate |jsDate | formatDate}}</samp>
-                                &nbsp;-&nbsp;<samp>{{CreatedDate |jsDate | formatDate}}</samp>
+                                &nbsp; :<samp> {{vm.row.CreatedDate |jsDate | formatDate}}</samp>
+                                &nbsp;-&nbsp;<samp>{{vm.row.CreatedDate |jsDate | formatDate}}</samp>
                             </td>
                         </tr>
                         <tr>
                             <td>Personel</td>
-                            <td>&nbsp; :<samp> {{CreatedUserText}}</samp></td>
+                            <td>&nbsp; :<samp> {{vm.row.CreatedUserText}}</samp></td>
                         </tr>
                     </table>
                     <br />
@@ -70,15 +70,15 @@
                     <p class="text-uppercase text-center" style="font-size:14px;">Müşteri Bilgileri</p>
                 </div>
                 <div style="font-size:13px;">
-                    <samp>Müşteri Adı: </samp><strong>{{CustomerName}}</strong>
+                    <samp>Müşteri Adı: </samp><strong>{{vm.row.CustomerName}}</strong>
                     <br />
-                    <samp>Telefon: </samp><abbr>0</abbr>{{PhoneNumber}}
+                    <samp>Telefon: </samp><abbr>0</abbr>{{vm.row.PhoneNumber}}
                     <br />
-                    <samp>Teslim Tarihi: </samp>{{OrderDate |jsDate | formatDate}}
+                    <samp>Teslim Tarihi: </samp>{{vm.row.OrderDate |jsDate | formatDate}}
                     <br />
-                    <samp>Verilen:</samp>{{Debt}}
+                    <samp>Verilen:</samp>{{vm.row.Debt}}
                     <br />
-                    <samp>Durum:</samp><b>{{IsPaid ? true : 'Ödendi' : 'Ödenmedi'}}</b>
+                    <samp>Durum:</samp><b>{{vm.row.IsPaid == true ? 'Ödendi':'Ödenmedi'}}</b>
                 </div>
             </div>
             <br />
@@ -94,37 +94,36 @@
                         </tr>
                     </thead>
                     <tbody style="font-size:13px; border:groove;">
-                        <tr ng-repeat="item in DetailList" style="font-size:9px; border:groove;">
+                        <tr ng-repeat="item in vm.row.DetailList" style="font-size:9px; border:groove;">
                             <td>{{item.ProductName}}</td>
                             <td>{{item.OperationText}}</td>
                             <td>{{item.Quantity}}</td>
-                            <td>{{item.Price}} ₺</td>
-                            <td style="padding-right:5px;">{{item.TotalPrice}} ₺</td>
+                            <td>{{item.Price}} TL</td>
+                            <td style="padding-right:5px;">{{item.TotalPrice}} TL</td>
                         </tr>
                     </tbody>
                 </table>
                 <table class="table table-condensed" style="float:left;">
                     <tr>
                         <td></td>
-                        <td>Toplam Parça:<strong>{{TQuantity}}</strong></td>
-                        <td>Toplam Tutar:<strong>{{TTotalPrice}} ₺</strong></td>
-                        <td>İndirimli Tutar:<strong>{{NTotalPrice}} ₺</strong></td>
+                        <td>Toplam Parça:<strong>{{vm.row.TQuantity}}</strong></td>
+                        <td>Toplam Tutar:<strong>{{vm.row.TTotalPrice}} TL</strong></td>
+                        <td>İndirimli Tutar:<strong>{{vm.row.NTotalPrice}} TL</strong></td>
                         <td></td>
                     </tr>
                 </table>
-                <p>Açıklama:<strong>{{Addition}}</strong></p>
+                <p>Açıklama:<strong>{{vm.row.Addition}}</strong></p>
             </div>
             <br />
             <div class="row" style="float:left;">
                 <div class="col-lg-12" style="font-size:10px !important;">
-                    <em style="font-size:15px !important;"><i>SAMPLE Terzi'yi Tercih Ettiğiniz İçin Teşekkür Ederiz.</i></em>
-                    <em style="font-size:15px !important;" class="text-uppercase">Ürün verenler aşağıdaki şartları kabul etmiştir.</em>
-                    <em style="font-size:15px !important;">30 gün içerisinde alınmayan ürünlerden ve üretimden kaynaklı ürün bozulmalarından firmamız sorumlu değildir.</em>
+                    <em style="font-size:15px !important;">15 gün içerisinde alınmayan ürünlerden mesul değiliz.</em>
                 </div>
             </div>
         </div>
-
     </div>
+
+
     <!--------------------------------------all external js documents----------------------------------------------->
     <script src="../scripts/modernizr-2.8.3.js"></script>
     <script src="../scripts/respond.min.js"></script>
@@ -164,6 +163,10 @@
     <script src="login.js"></script>
 
     <!--app controllers-->
+    <!--<script src="SUPPORT/Receipt/receipt.module.js"></script>
+     <script src="SUPPORT/Receipt/receipt.config.js"></script>
+     <script src="SUPPORT/Receipt/receipt.controller.js"></script>
+     <script src="SUPPORT/Receipt/receipt.dialog.controller.js"></script>-->
     <script src="SUPPORT/Receipt/receipt.module.js"></script>
     <script src="SUPPORT/Receipt/receipt.config.js"></script>
     <script src="SUPPORT/Receipt/receipt.controller.js"></script>

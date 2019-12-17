@@ -26,7 +26,17 @@
             vm.reverse = !vm.reverse;
         };
 
-        
+        vm.sendTweet = function () {
+            var input = { 'data' : vm.tweet }
+
+            $http.post('/api/Home/UpdateStatus', input)
+                .then(function (response) {
+                    vm.data = response.data.retObject;
+                    $filter("showInfo")($filter, 'Tweet Atıldı!', 1000, 'info');
+                });
+
+
+        }
     }
 })();
 
